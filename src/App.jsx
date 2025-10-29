@@ -4,14 +4,17 @@ import { Map } from "./Map";
 
 import "./App.css";
 import "leaflet/dist/leaflet.css";
+import { useState } from "react";
 
 function App() {
+  const [selected, setSelected] = useState({});
+  console.log(selected);
   return (
     <div className="app">
       <Header />
-      <Sidebar />
+      <Sidebar selected={selected} />
       <div className="mainArea">
-        <Map />
+        <Map setSelected={setSelected} />
       </div>
     </div>
   );
