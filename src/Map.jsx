@@ -5,14 +5,13 @@ import {
   CircleMarker,
   GeoJSON,
 } from "react-leaflet";
+import { Button, Typography } from "@mui/material";
+import Favorite from "@mui/icons-material/Favorite";
 
 import data from "./assets/4.5_week.geojson.json";
 import borders from "./assets/plate_boundaries.geojson.json";
 
-console.log(data.features);
-console.log(borders);
-
-export const Map = ({ setSelected }) => {
+export const Map = ({ setSelected, slider }) => {
   const earthquakes = data.features; // Wir benötigen nur den Feature-Array aus den Daten
 
   return (
@@ -23,7 +22,9 @@ export const Map = ({ setSelected }) => {
     >
       <TileLayer
         url="https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png"
-        attribution='&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, Tiles courtesy of <a href=\"https://www.openstreetmap.cat\" target=\"_blank\">Breton OpenStreetMap Team</a>'
+        attribution={
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
+        }
       />
 
       <GeoJSON data={borders} pathOptions={{ color: "#0000ff" }} />
@@ -32,13 +33,20 @@ export const Map = ({ setSelected }) => {
         <CircleMarker
           key={i}
           center={[d.geometry.coordinates[1], d.geometry.coordinates[0]]}
-          radius={d.properties.mag ** 2}
+          radius={d.properties.mag ** slider}
           pathOptions={{ color: "#ff0000" }}
         >
           <Popup>
             <div style={{ textAlign: "center" }}>
-              {d.properties.title} <br />
-              <button onClick={() => setSelected(d)}>Auswählen</button>
+              <Typography variant="h6">{d.properties.title}</Typography>
+              <Button
+                variant="contained"
+                size="small"
+                color="success"
+                onClick={() => setSelected(d)}
+              >
+                <Favorite />
+              </Button>
             </div>
           </Popup>
         </CircleMarker>
