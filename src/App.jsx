@@ -1,7 +1,8 @@
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
 import { Map } from "./Map";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { interval_hour, magnitude_significant } from "./constants.jsx";
 
 import "./App.css";
 import "leaflet/dist/leaflet.css";
@@ -13,10 +14,29 @@ import "@fontsource/roboto/700.css";
 function App() {
   const [selected, setSelected] = useState({});
   const [slider, setSlider] = useState(1);
-  console.log(selected);
+  const baseUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary";
+  const [data, setData] = useState({});
+  const [magnitude, setMagnitude] = useState(magnitude_significant);
+  const [interval, setInterval] = useState(interval_hour);
+  useEffect(() => {
+    fetch(`${baseUrl}/${magnitude}_${interval}.geojson`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((json) => setData(json))
+      .catch((error) => console.error(error));
+  }, [magnitude, interval]);
   return (
     <div className="app">
-      <Header />
+      <Header
+        magnitude={magnitude}
+        setMagnitude={setMagnitude}
+        interval={interval}
+        setInterval={setInterval}
+      />
       <Sidebar
         selected={selected}
         setSelected={setSelected}
@@ -24,7 +44,7 @@ function App() {
         setSlider={setSlider}
       />
       <div className="mainArea">
-        <Map setSelected={setSelected} slider={slider} />
+        <Map data={data} setSelected={setSelected} slider={slider} />
       </div>
     </div>
   );

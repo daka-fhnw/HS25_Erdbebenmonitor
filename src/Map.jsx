@@ -8,11 +8,11 @@ import {
 import { Button, Typography } from "@mui/material";
 import Favorite from "@mui/icons-material/Favorite";
 
-import data from "./assets/4.5_week.geojson.json";
 import borders from "./assets/plate_boundaries.geojson.json";
 
-export const Map = ({ setSelected, slider }) => {
-  const earthquakes = data.features; // Wir benötigen nur den Feature-Array aus den Daten
+export const Map = ({ data, setSelected, slider }) => {
+  const earthquakes = data?.features || [];
+  console.log(earthquakes);
 
   return (
     <MapContainer
