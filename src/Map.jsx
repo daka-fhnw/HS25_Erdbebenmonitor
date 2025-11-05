@@ -12,13 +12,11 @@ import borders from "./assets/plate_boundaries.geojson.json";
 
 export const Map = ({ data, setSelected, slider }) => {
   const earthquakes = data?.features || [];
-  console.log(earthquakes);
-
   return (
     <MapContainer
       center={[40, -20]}
       zoom={2}
-      style={{ height: "95vh", width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         url="https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png"
